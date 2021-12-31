@@ -8,6 +8,9 @@ authors = ["Alistair Stark <astark@spiria.com>"]
 python = "^3.9"
 fastapi = "^0.70.1"
 uvicorn = {extras = ["standard"], version = "^0.16.0"}
+SQLAlchemy = "^1.4.29"
+alembic = "^1.7.5"
+psycopg2 = "^2.9.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

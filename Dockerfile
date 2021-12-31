@@ -9,8 +9,7 @@ RUN apt-get install -y \
   libpq-dev \
   python3-psycopg2 \
   python3-dev \
-  gcc \
-  curl
+  gcc
 
 COPY poetry.lock poetry.lock
 COPY pyproject.toml pyproject.toml
