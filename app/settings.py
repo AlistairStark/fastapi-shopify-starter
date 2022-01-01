@@ -1,6 +1,7 @@
 import os
 
 PROJECT_NAME = os.getenv("PROJECT_NAME", "Shopify Starter")
-DB_URL = os.getenv(
-    "DB_URL", f"postgresql://postgres:postgres@{PROJECT_NAME}-postgres/postgres"
-)
+POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "postgres")
+POSTGRES_DBS = os.getenv("POSTGRES_DBS", "postgres")
+DB_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{PROJECT_NAME}-postgres/{POSTGRES_DBS}"
