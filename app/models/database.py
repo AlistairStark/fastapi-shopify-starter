@@ -5,7 +5,12 @@ from sqlalchemy.orm.session import Session
 
 from app import settings
 
-engine = create_engine(settings.get_db_url())
+
+def make_engine():
+    return create_engine(settings.get_db_url())
+
+
+engine = make_engine()
 
 SessionLocal = scoped_session(sessionmaker(bind=engine))
 
