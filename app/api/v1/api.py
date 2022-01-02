@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+
 from app.api.v1.ping import router as ping_router
 from app.api.v1.user import router as user_router
 

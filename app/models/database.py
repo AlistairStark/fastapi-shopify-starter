@@ -1,14 +1,17 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm.session import Session
 
-from app.settings import DB_URL
+from app import settings
 
-engine = create_engine(DB_URL)
+engine = create_engine(settings.get_db_url())
 
-SessionLocal = scoped_session(
-    sessionmaker(autocommit=False, autoflush=False, bind=engine)
-)
+SessionLocal = scoped_session(sessionmaker(bind=engine))
+
+
+def get_session(*args, **kwargs) -> Session:
+    return SessionLocal(*args, **kwargs)
 
 
 class DeclarativeBase:

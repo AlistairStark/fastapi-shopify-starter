@@ -1,25 +1,23 @@
+from typing import final
+
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlalchemy.orm.session import sessionmaker
 
 from app import app
-from app.models.database import Base
-from app.settings import POSTGRES_USER, POSTGRES_PASSWORD, PROJECT_NAME
+from app.models.database import Base, engine, get_session
 
-TEST_DB_NAME = "test"
-TEST_DB_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{PROJECT_NAME}-postgres/{TEST_DB_NAME}"
-
-engine = create_engine(TEST_DB_URL)
-
-TestSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-
-@pytest.fixture(autouse=True)
-def test_db():
-    Base.metadata.create_all(bind=engine)
-    yield
-    Base.metadata.drop_all(bind=engine)
+# @pytest.fixture(autouse=True)
+# def test_db():
+#     # session = get_session()
+#     # # try:
+#     # Base.metadata.create_all(bind=engine)
+#     yield
+# except:
+#     session.rollback()
+# finally:
+# Base.metadata.drop_all(bind=engine)
+# session.commit()
+# session.close()
 
 
 @pytest.fixture

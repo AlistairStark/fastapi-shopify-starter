@@ -20,7 +20,7 @@ services:
       DB_URL: ${DB_URL}
       # CELERY_BROKER_URL: "${CELERY_BROKER_URL}"
       # CELERY_RESULT_BACKEND: "${CELERY_RESULT_BACKEND}"
-    # command: ["/bin/bash"]
+    command: ["/bin/bash"]
     stdin_open: true
     tty: true
 

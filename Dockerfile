@@ -18,4 +18,4 @@ RUN pip install --ignore-installed poetry
 RUN poetry config virtualenvs.create false
 RUN poetry install --no-interaction
 
-CMD ["bash", "run.sh"]
+# CMD ["bash", "run.sh"]

@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from typing import List
-from fastapi import APIRouter
-from app.services.user_service import UserService
-from app.models.user import User
 
+from fastapi import APIRouter
 from pydantic import BaseModel
+
+from app.services.user_service import UserService
 
 router = APIRouter()
 
@@ -15,14 +15,7 @@ class UserModel(BaseModel):
     email: str
 
 
-class UserModelList(BaseModel):
-    users: List[UserModel]
-
-
-@router.get("/users")
-def get_all_users() -> UserModelList:
+@router.get("/users", response_model=List[UserModel])
+def get_all_users():
     users = UserService().get_all()
-    user_list: UserModelList = {
-        "users": [{"id": u.id, "email": u.email} for u in users]
-    }
-    return user_list
+    return [{"id": u.id, "email": u.email} for u in users]
