@@ -2,4 +2,6 @@ PROJECT_NAME=shopify-starter
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_DBS=postgres
-DB_URL=postgresql://postgres:postgres@shopify-starter-postgres/postgres 
+DB_URL=postgresql://postgres:postgres@shopify-starter-postgres/postgres
+SHOPIFY_APP_KEY=<key>
+SHOPIFY_APP_SECRET=<secret>

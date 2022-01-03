@@ -17,7 +17,8 @@ def test_db():
     stmt = f"TRUNCATE {','.join(tables)};"
     s = get_session()
     s.execute(stmt)
-    s.close()
+    s.commit()
+    s.close_all()
 
 
 @pytest.fixture
