@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
+from app.api.v1.install import router as install_router
 from app.api.v1.ping import router as ping_router
 from app.api.v1.user import router as user_router
-from app.api.v1.install import router as install_router
 
 v1_router = APIRouter()
 

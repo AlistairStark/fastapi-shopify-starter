@@ -1,5 +1,6 @@
-from fastapi.exceptions import HTTPException
 import pytest
+from fastapi.exceptions import HTTPException
+
 from app.services.verification import Verification
 
 

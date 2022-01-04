@@ -1,3 +1,5 @@
+import asyncio
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -9,16 +11,16 @@ Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
 
 
-@pytest.fixture(autouse=True)
-def test_db():
-    tables = []
-    for t in Base.metadata.sorted_tables:
-        tables.append(f'"{t.name}"')
-    stmt = f"TRUNCATE {','.join(tables)};"
-    s = get_session()
-    s.execute(stmt)
-    s.commit()
-    s.close_all()
+# @pytest.fixture(autouse=True)
+# def test_db():
+#     tables = []
+#     for t in Base.metadata.sorted_tables:
+#         tables.append(f'"{t.name}"')
+#     stmt = f"TRUNCATE {','.join(tables)};"
+#     s = get_session()
+#     s.execute(stmt)
+#     s.commit()
+#     s.close_all()
 
 
 @pytest.fixture
@@ -30,3 +32,11 @@ def client():
 @pytest.fixture
 def user_default():
     return factories.UserFactory(email="testmail@test.com")
+
+
+@pytest.yield_fixture(scope="session")
+def event_loop(request):
+    """Create an instance of the default event loop for each test case."""
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+    yield loop
+    loop.close()

@@ -1,6 +1,9 @@
-from app.settings import SHOPIFY_APP_SECRET
-import hmac, hashlib
+import hashlib
+import hmac
+
 from fastapi import HTTPException
+
+from app.settings import SHOPIFY_APP_SECRET
 
 
 class Verification:
@@ -24,3 +27,6 @@ class Verification:
             hashlib.sha256,
         )
         return got_hmac.hexdigest() == shopify_hmac
+
+    def generate_redirect_url(self, nonce, shop_name) -> str:
+        return ""
