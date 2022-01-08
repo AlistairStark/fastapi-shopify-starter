@@ -23,6 +23,7 @@ services:
       CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
       SHOPIFY_APP_KEY: ${SHOPIFY_APP_KEY}
       SHOPIFY_APP_SECRET: ${SHOPIFY_APP_SECRET}
+      REDIRECT_URL: ${REDIRECT_URL}
     command: ["bash", "run.sh"]
 
   worker:
@@ -40,6 +41,7 @@ services:
       CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
       SHOPIFY_APP_KEY: ${SHOPIFY_APP_KEY}
       SHOPIFY_APP_SECRET: ${SHOPIFY_APP_SECRET}
+      REDIRECT_URL: ${REDIRECT_URL}
     depends_on:
       - api
       - redis

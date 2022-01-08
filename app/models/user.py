@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 
-from app.models.database import Base
+from app.models.base import Base
 from app.models.helpers import CreatedAtUpdatedAtMixin
 
 

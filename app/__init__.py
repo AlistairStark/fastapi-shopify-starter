@@ -4,6 +4,7 @@ from fastapi import FastAPI
 
 from app import settings
 from app.api.v1.api import v1_router
+from app.redis import redis
 
 app = FastAPI(title=settings.PROJECT_NAME)
 

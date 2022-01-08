@@ -1,12 +1,13 @@
 import pytest
 
+from app.dependencies.db import get_redis
 from app.services.nonce_service import NonceService
 
 
 @pytest.mark.asyncio
 async def test_nonce_service_create():
     shop_name = "testshop"
-    nonce_service = NonceService()
+    nonce_service = NonceService(get_redis())
     nonce = await nonce_service.create(shop_name)
     got = await nonce_service.get(shop_name)
     is_valid = await nonce_service.validate(shop_name, nonce)
@@ -20,7 +21,7 @@ async def test_nonce_service_create():
 @pytest.mark.asyncio
 async def test_nonce_service_create_no_nonce():
     shop_name = "testshoprandom"
-    nonce_service = NonceService()
+    nonce_service = NonceService(get_redis())
     nonce = "arandomstring"
     got = await nonce_service.get(shop_name)
     is_valid = await nonce_service.validate(shop_name, nonce)
@@ -34,7 +35,7 @@ async def test_nonce_service_create_no_nonce():
 @pytest.mark.asyncio
 async def test_nonce_service_delete_nonce():
     shop_name = "testshop"
-    nonce_service = NonceService()
+    nonce_service = NonceService(get_redis())
     nonce = await nonce_service.create(shop_name)
     await nonce_service.delete(shop_name)
     got = await nonce_service.get(shop_name)
