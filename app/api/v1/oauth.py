@@ -13,8 +13,8 @@ from app.services.verification import Verification
 router = APIRouter()
 
 
-@router.get("/install")
-async def install_app(req: Request, redis: Redis = Depends(get_redis)):
+@router.get("/oauth")
+async def oauth(req: Request, redis: Redis = Depends(get_redis)):
     shop_name = req.query_params.get("shop")
     if not shop_name:
         raise HTTPException(
@@ -31,7 +31,7 @@ async def install_app(req: Request, redis: Redis = Depends(get_redis)):
 
 
 @router.get("/redirect")
-async def redirect_app(
+async def redirect(
     req: Request,
     redis: Redis = Depends(get_redis),
     db_session: AsyncSession = Depends(get_db),
