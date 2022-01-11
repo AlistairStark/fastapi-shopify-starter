@@ -71,8 +71,9 @@ SHOPIFY_APP_KEY = os.getenv("SHOPIFY_APP_KEY")
 SHOPIFY_APP_SECRET = os.getenv("SHOPIFY_APP_SECRET")
 REDIS_URI = os.getenv("REDIS_URI")
 REDIRECT_URL = (
-    "https://37b8-206-172-242-206.ngrok.io/v1/redirect"  # os.getenv("REDIRECT_URL")
+    "https://9334-206-172-242-206.ngrok.io/v1/redirect"  # os.getenv("REDIRECT_URL")
 )
+SECRET = os.getenv("SECRET", "").encode()
 
 
 def get_db_url():

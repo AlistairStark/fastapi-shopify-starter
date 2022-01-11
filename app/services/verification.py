@@ -3,6 +3,7 @@ import hmac
 import re
 from typing import Optional
 
+from cryptography.fernet import Fernet
 from fastapi import HTTPException
 
 from app import settings
@@ -32,11 +33,21 @@ class Verification:
 
     def validate_shop_name(self, shop_name: str) -> Optional[str]:
         """Tests the shop name to ensure it is a valid match and parses the shop name"""
-        pattern = r"\A(https|http)\:\/\/[a-zA-Z0-9][a-zA-Z0-9\-]*\.myshopify\.com\/"
+        pattern = r"^[a-zA-Z0-9][a-zA-Z0-9\-]*\.myshopify\.com"
         regex = re.compile(pattern)
         if regex.match(shop_name):
-            m = re.search(r":\/\/(.*?).myshopify", shop_name)
-            return m.group(1)
+            split_str = shop_name.split(".myshopify.com")
+            return split_str[0]
 
     def generate_redirect_url(self, nonce, shop_name) -> str:
         return f"https://{shop_name}/admin/oauth/authorize?client_id={settings.SHOPIFY_APP_KEY}&scope={settings.SCOPES}&redirect_uri={settings.REDIRECT_URL}&state={nonce}"
+
+    def encrypt(self, unencrypted_token: str) -> str:
+        fernet = Fernet(settings.SECRET)
+        encrypted_token = fernet.encrypt(unencrypted_token.encode())
+        return encrypted_token.decode()
+
+    def decrypt(self, encrypted_token: str) -> str:
+        fernet = Fernet(settings.SECRET)
+        decrypted_token = fernet.decrypt(encrypted_token.encode())
+        return decrypted_token.decode()

@@ -24,6 +24,7 @@ services:
       SHOPIFY_APP_KEY: ${SHOPIFY_APP_KEY}
       SHOPIFY_APP_SECRET: ${SHOPIFY_APP_SECRET}
       REDIRECT_URL: ${REDIRECT_URL}
+      SECRET: ${SECRET}
     command: ["bash", "run.sh"]
 
   worker:
@@ -42,6 +43,7 @@ services:
       SHOPIFY_APP_KEY: ${SHOPIFY_APP_KEY}
       SHOPIFY_APP_SECRET: ${SHOPIFY_APP_SECRET}
       REDIRECT_URL: ${REDIRECT_URL}
+      SECRET: ${SECRET}
     depends_on:
       - api
       - redis

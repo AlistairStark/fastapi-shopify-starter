@@ -38,8 +38,8 @@ def test_generate_redirect_url():
 @pytest.mark.parametrize(
     ("shop_name", "expected"),
     [
-        ("https://example-shop.myshopify.com/", "example-shop"),
-        ("https://invalid-shop.myshopify.com", None),
+        ("https://example-shop.myshopify.com", "example-shop"),
+        ("https://invalid-shop.myshopify.ca", None),
         ("", None),
         ("somerandomstring", None),
     ],
@@ -47,3 +47,17 @@ def test_generate_redirect_url():
 def test_validate_shop_name(shop_name, expected):
     got = Verification().validate_shop_name(shop_name)
     assert got == expected
+
+
+@pytest.mark.parametrize(
+    "test_str",
+    [
+        "test",
+        "test-with-hyphens",
+    ],
+)
+def test_encryption(test_str):
+    verification = Verification()
+    encrypted = verification.encrypt(test_str)
+    got = verification.decrypt(encrypted)
+    assert got == test_str
