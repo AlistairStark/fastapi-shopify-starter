@@ -9,6 +9,7 @@ from app.services.nonce_service import NonceService
 from app.services.shop_service import ShopService
 from app.services.shopify_token_service import ShopifyToken
 from app.services.verification import Verification
+from app.settings import BASE_URL, REDIRECT_URL
 
 router = APIRouter()
 
@@ -64,4 +65,4 @@ async def redirect(
         await ShopService(db_session, verification_service).create_shop(
             shop_name, token_response.access_token, token_response.scope
         )
-    return f"<h1>TITLE {shop_name}</h1>"
+    return RedirectResponse(url=BASE_URL)

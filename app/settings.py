@@ -70,9 +70,8 @@ POSTGRES_DBS = os.getenv("POSTGRES_DBS", "postgres")
 SHOPIFY_APP_KEY = os.getenv("SHOPIFY_APP_KEY")
 SHOPIFY_APP_SECRET = os.getenv("SHOPIFY_APP_SECRET")
 REDIS_URI = os.getenv("REDIS_URI")
-REDIRECT_URL = (
-    "https://b198-206-172-242-206.ngrok.io/v1/redirect"  # os.getenv("REDIRECT_URL")
-)
+BASE_URL = "https://6337-206-172-242-206.ngrok.io"
+REDIRECT_URL = f"{BASE_URL}/api/v1/redirect"  # os.getenv("REDIRECT_URL")
 SECRET = os.getenv("SECRET", "").encode()
 
 
