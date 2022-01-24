@@ -38,10 +38,9 @@ async def redirect(
     db_session: AsyncSession = Depends(get_db),
 ):
     shop_url = req.query_params.get("shop")
-    if not shop_url:
-        raise HTTPException(
-            status_code=400, detail="Shop must be included in parameters"
-        )
+    host = req.query_params.get("host")
+    if not shop_url or not host:
+        raise HTTPException(status_code=400, detail="Invalid query parameters")
     auth_code = req.query_params.get("code")
     if not auth_code:
         raise HTTPException(status_code=400, detail="Code parameter must be included")
@@ -65,4 +64,4 @@ async def redirect(
         await ShopService(db_session, verification_service).create_shop(
             shop_name, token_response.access_token, token_response.scope
         )
-    return RedirectResponse(url=BASE_URL)
+    return RedirectResponse(url=f"{BASE_URL}?host={host}")
