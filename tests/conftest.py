@@ -7,6 +7,7 @@ from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.testclient import TestClient
 
+from app.dependencies.auth import AuthDetails, authenticate_shopify_jwt
 from app.models.base import Base
 from app.session import async_session, engine
 
@@ -26,8 +27,6 @@ async def db_session() -> AsyncSession:
         await connection.run_sync(Base.metadata.create_all)
         async with async_session(bind=connection) as session:
             yield session
-            # await session.flush()
-            # await session.rollback()
             await connection.run_sync(Base.metadata.drop_all)
 
 
@@ -54,7 +53,19 @@ async def client(app: FastAPI):
         yield ac
 
 
-@pytest.fixture
+@pytest.fixture()
 def sync_client():
     test_client = TestClient(app)
     yield test_client
+
+
+def _auth_override():
+    return AuthDetails(
+        domain="https://test.myshopify.com",
+        shopify_user_id=1,
+    )
+
+
+@pytest.fixture()
+def override_auth(app):
+    app.dependency_overrides[authenticate_shopify_jwt] = _auth_override

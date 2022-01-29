@@ -38,7 +38,7 @@ def test_generate_redirect_url():
 @pytest.mark.parametrize(
     ("shop_name", "expected"),
     [
-        ("https://example-shop.myshopify.com", "example-shop"),
+        ("example-shop.myshopify.com", "example-shop"),
         ("https://invalid-shop.myshopify.ca", None),
         ("", None),
         ("somerandomstring", None),

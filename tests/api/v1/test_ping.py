@@ -3,7 +3,7 @@ from starlette.testclient import TestClient
 
 
 @pytest.mark.asyncio
-async def test_ping(client: TestClient):
+async def test_ping(client: TestClient, override_auth):
     r = await client.get("/v1/ping")
 
     got = r.json()

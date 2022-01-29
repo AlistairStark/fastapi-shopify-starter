@@ -4,7 +4,7 @@ from fastapi.exceptions import HTTPException
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from starlette.responses import RedirectResponse
 
-from app.dependencies.db import get_redis, get_db
+from app.dependencies.db import get_db, get_redis
 from app.services.nonce_service import NonceService
 from app.services.shop_service import ShopService
 from app.services.shopify_token_service import ShopifyToken
