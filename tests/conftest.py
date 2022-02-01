@@ -61,7 +61,7 @@ def sync_client():
 
 def _auth_override():
     return AuthDetails(
-        domain="https://test.myshopify.com",
+        shop_name="test",
         shopify_user_id=1,
     )
 

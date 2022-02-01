@@ -7,9 +7,10 @@ from starlette.responses import RedirectResponse
 from app.dependencies.db import get_db, get_redis
 from app.services.nonce_service import NonceService
 from app.services.shop_service import ShopService
+from app.services.shopify_api_service import ShopifyApi
 from app.services.shopify_token_service import ShopifyToken
 from app.services.verification import Verification
-from app.settings import BASE_URL, REDIRECT_URL
+from app.settings import BASE_URL
 
 router = APIRouter()
 
@@ -61,7 +62,14 @@ async def redirect(
     shop = await shop_service.get_shop(shop_name)
     if not shop:
         token_response = await ShopifyToken().get_permanent_token(shop_url, auth_code)
-        await ShopService(db_session, verification_service).create_shop(
-            shop_name, token_response.access_token, token_response.scope
+        shop = await shop_service.create_shop(
+            shop_name, token_response.access_token, token_response.scope, host
         )
+    is_dev = await ShopifyApi(shop).is_dev_store()
+    if is_dev != shop.dev_store:
+        await shop_service.update_shop(shop, {"dev_store": is_dev})
+    if shop.charge_id:
+        # TODO check https://shopify.dev/api/admin-rest/2022-01/resources/recurringapplicationcharge#[get]/admin/api/2022-01/recurring_application_charges/{recurring_application_charge_id}.json
+        # if not valid, delete charge ID
+        print("CHARGE: ", shop.charge_id)
     return RedirectResponse(url=f"{BASE_URL}?host={host}")

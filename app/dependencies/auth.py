@@ -72,9 +72,17 @@ def authenticate_payload_and_signature(jwt: str) -> dict:
         raise HTTPException(401, detail="Invalid JWT")
 
 
+def _get_shop_name(shop_url: str) -> str:
+    try:
+        remove_schema = shop_url.replace("https://", "")
+        return remove_schema.split(".")[0]
+    except Exception as e:
+        logger.error(e)
+
+
 @dataclass
 class AuthDetails:
-    domain: str
+    shop_name: str
     shopify_user_id: str
 
 
@@ -83,4 +91,5 @@ def authenticate_shopify_jwt(request: Request) -> AuthDetails:
     if not shopify_jwt:
         raise HTTPException(status_code=403, detail="Forbidden")
     payload = authenticate_payload_and_signature(shopify_jwt)
-    return AuthDetails(domain=payload["dest"], shopify_user_id=payload["sub"])
+    shop_name = _get_shop_name(payload["dest"])
+    return AuthDetails(shop_name=shop_name, shopify_user_id=payload["sub"])

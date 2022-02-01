@@ -18,13 +18,33 @@ class ShopService(DBService):
         super().__init__(db_session)
         self.verification_service = verification_service
 
-    async def create_shop(self, shop_name: str, access_token: str, scopes: str):
+    async def create_shop(
+        self,
+        shop_name: str,
+        access_token: str,
+        scopes: str,
+        host: str,
+    ) -> Shop:
         token = self.verification_service.encrypt(access_token)
         session: AsyncSession
         async with self.session as session:
-            s = Shop(shop_name=shop_name, token=token, scopes=scopes)
+            s = Shop(
+                shop_name=shop_name,
+                token=token,
+                scopes=scopes,
+                host=host,
+            )
             session.add(s)
             await session.commit()
+            return s
+
+    async def update_shop(self, shop: Shop, params: dict) -> Shop:
+        for k, v in params.items():
+            setattr(shop, k, v)
+        async with self.session as session:
+            session.add(shop)
+            await session.commit()
+            return shop
 
     async def get_shop(self, shop_name: str) -> Optional[Shop]:
         session: AsyncSession
