@@ -93,3 +93,23 @@ def authenticate_shopify_jwt(request: Request) -> AuthDetails:
     payload = authenticate_payload_and_signature(shopify_jwt)
     shop_name = _get_shop_name(payload["dest"])
     return AuthDetails(shop_name=shop_name, shopify_user_id=payload["sub"])
+
+
+def validate_webhook(header_hmac: str, data: bytes) -> bool:
+    digest = hmac.new(
+        settings.SHOPIFY_APP_SECRET_ENCODED, data, hashlib.sha256
+    ).digest()
+    computed_hmac = base64.b64encode(digest)
+    return hmac.compare_digest(computed_hmac, header_hmac.encode("utf-8"))
+
+
+async def authenticate_shopify_webhook(request: Request) -> bool:
+    """Verifies the authenticity of a shopify webhook request"""
+    shopify_hmac: str = request.headers.get("X-Shopify-Hmac-SHA256")
+    data = await request.body()
+    if not shopify_hmac:
+        raise HTTPException(400, detail="Invalid headers")
+    valid = validate_webhook(shopify_hmac, data)
+    if not valid:
+        raise HTTPException(403, detail="Forbidden")
+    return valid

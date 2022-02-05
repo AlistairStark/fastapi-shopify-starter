@@ -1,6 +1,6 @@
 import pytest
 
-from app.dependencies.auth import authenticate_payload_and_signature
+from app.dependencies.auth import authenticate_payload_and_signature, validate_webhook
 
 
 @pytest.mark.freeze_time("2022-01-29T00:13:57Z")
@@ -18,4 +18,29 @@ def test_authenticate_payload_and_signature_valid():
         "sid": "aaacd66aed193d0754a4ebf9636953490aaebaa0cafadcfbe20fd43c50961052",
         "sub": "80147644658",
     }
+    assert got == expected
+
+
+@pytest.mark.parametrize(
+    ("header_hmac,body,expected"),
+    [
+        (
+            "zT+ihbQU5psymo+keg7ytoKSdJCb0xmEr2ozcFYp4Zc=",
+            b'{"shop_id":62122328306,"shop_domain":"integration-test-store-atik.myshopify.com","customer":{"id":6068768080114,"email":"allystark1000@gmail.com","phone":"+18199184407"},"orders_requested":[]}',
+            True,
+        ),
+        (
+            "zT+ihbQU5psymo+keg7ytoKSdJCb0xmEr2ozcFYp4Zc=",
+            b'{"shop_id":1,"shop_domain":"integration-test-store-atik.myshopify.com","customer":{"id":6068768080114,"email":"allystark1000@gmail.com","phone":"+18199184407"},"orders_requested":[]}',
+            False,
+        ),
+        (
+            "aT+ihbQU5psymo+keg7ytoKSdJCb0xmEr2ozcFYp4Zc=",
+            b'{"shop_id":62122328306,"shop_domain":"integration-test-store-atik.myshopify.com","customer":{"id":6068768080114,"email":"allystark1000@gmail.com","phone":"+18199184407"},"orders_requested":[]}',
+            False,
+        ),
+    ],
+)
+def test_authenticate_shopify_webhook(header_hmac, body, expected):
+    got = validate_webhook(header_hmac, body)
     assert got == expected
