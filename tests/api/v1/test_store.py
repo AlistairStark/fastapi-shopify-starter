@@ -12,7 +12,7 @@ async def test_check_plan(client: TestClient, override_auth, db_session):
             "token": "12345",
             "scopes": "test1,test2",
             "dev_store": True,
-            "subscribed": False,
+            "charge_id": None,
         },
         db_session,
     )

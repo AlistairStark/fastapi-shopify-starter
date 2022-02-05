@@ -8,6 +8,7 @@ from app.dependencies.db import get_db, get_redis
 from app.services.nonce_service import NonceService
 from app.services.shop_service import ShopService
 from app.services.shopify_api_service import ShopifyApi
+from app.services.shopify_rest_service import ShopifyRest
 from app.services.shopify_token_service import ShopifyToken
 from app.services.verification import Verification
 from app.settings import BASE_URL
@@ -49,7 +50,7 @@ async def redirect(
     shop_name = verification_service.validate_shop_name(shop_url)
     if not shop_name:
         raise HTTPException(status_code=400, detail="Shop name is required")
-    is_valid = Verification().verify_hmac(req.query_params)
+    is_valid = verification_service.verify_hmac(req.query_params)
     if not is_valid:
         raise HTTPException(status_code=403, detail="Not allowed")
     nonce = req.query_params.get("state")
@@ -63,13 +64,16 @@ async def redirect(
     if not shop:
         token_response = await ShopifyToken().get_permanent_token(shop_url, auth_code)
         shop = await shop_service.create_shop(
-            shop_name, token_response.access_token, token_response.scope, host
+            shop_name,
+            token_response.access_token,
+            token_response.scope,
+            host,
         )
     is_dev = await ShopifyApi(shop).is_dev_store()
     if is_dev != shop.dev_store:
         await shop_service.update_shop(shop, {"dev_store": is_dev})
-    if shop.charge_id:
-        # TODO check https://shopify.dev/api/admin-rest/2022-01/resources/recurringapplicationcharge#[get]/admin/api/2022-01/recurring_application_charges/{recurring_application_charge_id}.json
-        # if not valid, delete charge ID
-        print("CHARGE: ", shop.charge_id)
+    if shop.charge_id and not is_dev:
+        is_subbed = await ShopifyRest(shop).check_subscription(shop.charge_id)
+        if not is_subbed:
+            shop = await shop_service.update_shop(shop, {"charge_id": None})
     return RedirectResponse(url=f"{BASE_URL}?host={host}")

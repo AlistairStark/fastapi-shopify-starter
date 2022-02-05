@@ -1,6 +1,4 @@
-from datetime import datetime
 import logging
-import json
 from typing import Optional
 from fastapi import HTTPException
 from gql import Client, gql

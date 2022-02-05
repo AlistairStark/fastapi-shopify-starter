@@ -2,7 +2,7 @@ import { useAppBridge } from "@shopify/app-bridge-react";
 import { Redirect } from "@shopify/app-bridge/actions";
 import React, { useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import { FullscreenSpinner } from "../components";
+import { FullscreenSpinner, AppFrame } from "../components";
 import { useApi } from "../hooks";
 import { AccountPage, HomePage } from "../pages";
 import { ApiRoutes } from "../types";
@@ -52,9 +52,11 @@ export const Routing = () => {
   }
 
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/account" element={<AccountPage />} />
-    </Routes>
+    <AppFrame>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/account" element={<AccountPage />} />
+      </Routes>
+    </AppFrame>
   );
 };

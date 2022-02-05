@@ -6,7 +6,7 @@ import enTranslations from "@shopify/polaris/locales/en.json";
 import { AppProvider } from "@shopify/polaris";
 
 import "@shopify/polaris/build/esm/styles.css";
-import { Footer, AppFrame, Link } from "./components";
+import { Footer, Link } from "./components";
 import { Provider } from "@shopify/app-bridge-react";
 import { Routing } from "./routing";
 
@@ -15,9 +15,7 @@ function App() {
   return (
     <Provider config={config}>
       <AppProvider i18n={enTranslations} linkComponent={Link}>
-        <AppFrame>
-          <Routing />
-        </AppFrame>
+        <Routing />
         <Footer />
       </AppProvider>
     </Provider>
