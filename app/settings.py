@@ -71,7 +71,7 @@ SHOPIFY_APP_KEY = os.getenv("SHOPIFY_APP_KEY")
 SHOPIFY_APP_SECRET = os.getenv("SHOPIFY_APP_SECRET")
 SHOPIFY_APP_SECRET_ENCODED = os.getenv("SHOPIFY_APP_SECRET", "").encode("utf-8")
 REDIS_URI = os.getenv("REDIS_URI")
-BASE_URL = "https://dcf4-206-172-242-206.ngrok.io"
+BASE_URL = "https://eb2a-184-161-87-16.ngrok.io"
 REDIRECT_URL = f"{BASE_URL}/api/v1/redirect"  # os.getenv("REDIRECT_URL")
 SECRET = os.getenv("SECRET", "").encode()
 
