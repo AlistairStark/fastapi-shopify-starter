@@ -118,8 +118,6 @@ class ShopifyApi:
             },
             "name": "Monthly Subscription",
             "returnUrl": f"{settings.BASE_URL}/api/v1/sub?shop_name={self.shop.shop_name}&nonce={nonce}",
-            # TODO should not be test for prod!
-            "test": True,
             "trialDays": 7,
         }
         data = await self._make_request(mutation, variables)
